@@ -1,0 +1,44 @@
+$primary-color: black;
+$secondary-color: #7698e2;
+$grey: rgb(215, 215, 215);
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+input {
+    box-sizing: border-box;
+    max-width: 300px;
+    line-height: 2.5em;
+    background: #f8f8f8;
+    border-radius: 7px;
+    padding: 0 20px;
+    font-size: 1em;
+    color: #666;
+    transition: all .2s ease;
+    outline: none;
+    margin: 0.5em 0 1em;
+    border: 2px solid $grey;
+    width: 100%;
+    &:focus {
+        border: 2px solid $secondary-color;
+        box-shadow: 0 0 5px $secondary-color;
+    }
+}
+label {
+    color: #666;
+    font-size: 0.85em;
+    font-weight: 700;
+}
+.hr-app {
+    margin: 0 auto;
+    max-width: 500px;
+    &__create-form {
+        display: flex;
+        flex-direction: column;
+        fieldset {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

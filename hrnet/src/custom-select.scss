@@ -1,0 +1,99 @@
+.custom-select {
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+    }
+
+    &__container {
+        width: 100px;
+        position: relative;
+
+        button {
+            border: 2px solid rgb(215, 215, 215);
+            border-radius: 4px;
+            background: #f8f8f8;
+            width: 100%;
+            padding: 6px 8px;
+            position: relative;
+            text-align: left;
+            font-size: 1em;
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            svg {
+                position: absolute;
+                width: 20px;
+                height: 20px;
+                right: 0px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+
+        }
+
+        ul {
+            position: absolute;
+            width: 100%;
+            z-index: 1;
+            background-color: white;
+            overflow-y: scroll;
+            max-height: 300px;
+            border-radius: 5px;
+            &.options {
+                border: 1px solid rgb(218, 218, 218);
+                display: none;
+                list-style: none;
+                padding: 4px 0;
+                margin-top: -4px;
+                box-shadow: 0px 5px 10px rgba(0,0,0,0.3);
+                margin-top: 1px;
+
+                &::-webkit-scrollbar {
+                    width: 12px;
+                    background-color: none;
+                }
+
+                &::-webkit-scrollbar-track {
+                    display: none;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    background-color: rgba(0,0,0,0);
+                    border-radius: 10px;
+                }
+
+                
+                &:hover {
+                    &::-webkit-scrollbar-thumb {
+                        background-color: rgba(205, 205, 205, 0.5);
+                        border-radius: 10px;
+                    }
+                    &::-webkit-scrollbar-thumb:hover {
+                        background-color: rgba(148, 148, 148, 0.5);
+                    }
+                }
+
+                li {
+                    padding: 6px 10px;
+                    font-size: 0.875em;
+                    &:active,
+                    &:focus,
+                    &:hover,
+                    &[aria-selected="true"] {
+                        background: pink;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            &.show {
+                display: block;
+            }
+
+
+        }
+    }
+}

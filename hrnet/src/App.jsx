@@ -1,44 +1,33 @@
+import React, { useState } from 'react';
 import './app.scss';
-import { states } from './config/states'
-import { departments } from './config/departements'
+import CreateEmployee from './pages/CreateEmployee';
+
 
 function App() {
+  const [view, setView] = useState('create')
 
+  const onViewClick = (e) => {
+    e.preventDefault()
+    const newView = view === 'create' ? 'list' : 'create'
+    setView(newView)
+  }
   return (
-    <div className="App">
+    <div className="hr-app">
       <h1>HRnet</h1>
-      <a href='/'>View Current Employees</a>
-      <h2>Create Employee</h2>
-      <form>
-        <label htmlFor="">First Name</label>
-        <input type='text' />
-        <label htmlFor="">Last Name</label>
-        <input type='text' />
-        <fieldset class="address">
-          <legend>Address</legend>
+      {view === 'create' &&
+        <React.Fragment>
+          <a href='/' onClick={onViewClick}>View Current Employees</a>
+          <h2>Create Employee</h2>
+          <CreateEmployee />
+        </React.Fragment>
+      }
+      {view === 'list' &&
+        <React.Fragment>
+          <a href='/' onClick={onViewClick}>Create a new Employee</a>
+          <h2>Current Employees</h2>
+        </React.Fragment>
+      }
 
-          <label for="street">Street</label>
-          <input id="street" type="text" />
-
-          <label for="city">City</label>
-          <input id="city" type="text" />
-
-          <label for="state-button">State</label>
-          <select name="state" id="state">
-            {states.map((state, index) => {
-              return <option key={state.name + index} value={state.abbreviation}>{state.name}</option>
-            })}
-          </select>
-          <label for="zip-code">Zip Code</label>
-          <input id="zip-code" type="number" />
-        </fieldset>
-        <select name='department' id='department'>
-          {departments.map((department, index) => {
-            return <option key={department + index}>{department}</option>
-          })}
-        </select>
-        <button type='submit'>Save</button>
-      </form>
 
     </div>
   );
