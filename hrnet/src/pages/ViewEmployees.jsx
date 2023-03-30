@@ -5,9 +5,17 @@ export default function ViewEmployees() {
     console.log(employees)
     return (
         <>
-            {employees.map(employee => {
-                return <div>{employee.firstName}</div>
-            })}
+            {employees.map((employee) => {
+                return (<div>
+                    {
+                        Object.keys(employee).map(key => {
+                            return <div>{key} : {employee[key]}</div>
+                        })
+                    }
+                </div>)
+
+            })
+            }
         </>
 
     )

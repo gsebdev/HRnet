@@ -1,36 +1,52 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import '../custom-select.scss'
+import useOutsideClick from "../hooks/useOusideClick";
 
-export default function CustomSelect({ options = [], selected = 0, onChange }) {
+export default function CustomSelect({ options = [], defaultValue, onChange, id, placeHolder }) {
     const [isOptionsOpen, setIsOptionsOpen] = useState(false)
-    const [selectedOption, setSelectedOption] = useState(selected)
-    const lastSelectedOption = useRef(selected)
-    
-    useEffect(() => {
-        lastSelectedOption.current = selected
-        setSelectedOption(selected)
-    }, [selected])
+    const [selectedOption, setSelectedOption] = useState(null)
+    const lastSelectedOption = useRef(null)
+    const selectRef = useRef(null)
+    const containerRef = useRef(null)
 
-    const triggerChange = (option) => {
+    useOutsideClick(containerRef, () => {setIsOptionsOpen(false)}, isOptionsOpen)
+
+    const triggerChange = useCallback((option) => {
         if (option !== lastSelectedOption.current && onChange) {
             lastSelectedOption.current = option
-            onChange(options[option], option)
+            onChange({target: selectRef.current})
         }
 
-    }
-
-    const toggleOptions = () => {
-        if (isOptionsOpen) {
+    }, [onChange])
+    
+    useEffect(() => {
+        if(defaultValue) {
+            let selected = null
+            if(options && typeof options[0] === 'object') {
+                selected = options.map(o => o.value).indexOf(defaultValue)
+            } else {
+                selected = options.indexOf(defaultValue)
+            }
+            lastSelectedOption.current = selected
+            setSelectedOption(selected)
+        }
+       
+    }, [defaultValue, options])
+    useEffect(() => {
+        if(!isOptionsOpen) {
             triggerChange(selectedOption)
         }
-        setIsOptionsOpen(!isOptionsOpen)
+    }, [isOptionsOpen, selectedOption, triggerChange])
+    
+    
 
+    const toggleOptions = () => {
+        setIsOptionsOpen(!isOptionsOpen)
     }
 
     const setSelectedThenCloseDropdown = (index) => {
         setSelectedOption(index)
         setIsOptionsOpen(false)
-        triggerChange(index)
     }
 
     const handleKeyDown = (index) => (e) => {
@@ -74,17 +90,20 @@ export default function CustomSelect({ options = [], selected = 0, onChange }) {
     };
 
     return (
-        <div className="custom-select__wrapper">
+        <div className="custom-select" ref={containerRef}>
             <div className="custom-select__container">
                 <button
                     type="button"
                     aria-haspopup="listbox"
                     aria-expanded={isOptionsOpen}
-                    className={isOptionsOpen ? "expanded" : ""}
+                    className={(isOptionsOpen ? "expanded" : '') + (selectedOption !== null ? '' : ' placeholder' )}
                     onClick={toggleOptions}
                     onKeyDown={handleListKeyDown}
+                    id={id}
+                    value={selectedOption !== null ? typeof options[selectedOption] === 'object' ? options[selectedOption].value : options[selectedOption] : undefined}
+                    ref={selectRef}
                 >
-                    {typeof options[selectedOption] === 'object' ? options[selectedOption].text : options[selectedOption]}
+                    {selectedOption !== null ? typeof options[selectedOption] === 'object' ? options[selectedOption].text : options[selectedOption] : placeHolder}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29"><path fill="none" stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" strokeWidth="2" d="m20.5 11.5-6 6-6-6"/></svg>
                 </button>
                 <ul
@@ -98,7 +117,6 @@ export default function CustomSelect({ options = [], selected = 0, onChange }) {
                         <li
                             key={typeof option === 'object' ? option.value + index : option + index}
                             role="option"
-                            data-value={typeof option === 'object' ? option.value : option}
                             aria-selected={selectedOption === index}
                             tabIndex={0}
                             onKeyDown={handleKeyDown(index)}

@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import '../datepicker.scss'
 import useOutsideClick from '../hooks/useOusideClick'
 
-export default function DatePicker() {
+export default function DatePicker({id, onChange, value = null}) {
     const now = useMemo(() => new Date(), [])
-    const [selectedDate, setSelectedDate] = useState(null)
+    const [selectedDate, setSelectedDate] = useState(value)
     const [selectedMonth, setSelectedMonth] = useState(now.getMonth())
     const [selectedYear, setSelectedYear] = useState(now.getFullYear())
     const [displayedWeeks, setDisplayedWeeks] = useState([])
@@ -147,7 +147,7 @@ export default function DatePicker() {
     return (
         <div className={prefix}>
             <div className={prefix + "__input-container"} onClick={onInputClick}>
-                <input type="text" value={selectedDate ? formatDate(selectedDate) : ''} readOnly={true} />
+                <input type="text" id={id} value={selectedDate ? formatDate(selectedDate) : ''} readOnly={true} onChange={onChange} />
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"

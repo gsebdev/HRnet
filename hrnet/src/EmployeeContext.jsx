@@ -2,15 +2,14 @@ import { createContext, useContext, useReducer } from 'react'
 
 const EmployeesContext = createContext([])
 
-const initialEmployees = [
-    { id: 0, firstName: 'Adam' },
-    { id: 1, firstName: 'Seb' },
-    { id: 2, firstName: 'Pierre'}
-  ]
+const initialEmployees = () => {
+  const storage = localStorage.getItem('employees')
+  return storage ? JSON.parse(storage) : []
+}
 export function EmployeesProvider({ children }) {
   const [employees, dispatch] = useReducer(
     employeesReducer,
-    initialEmployees
+    initialEmployees()
   )
   return (
     <EmployeesContext.Provider value={[employees, dispatch]}>
@@ -29,7 +28,9 @@ export function useEmployeesDispatch() {
 function employeesReducer(employees, action) {
   switch (action.type) {
     case 'add': {
-      return [...employees, action.employee];
+      const updatedEmployees = [...employees, action.employee]
+      localStorage.setItem('employees', JSON.stringify(updatedEmployees))
+      return updatedEmployees
     }
     case 'modify': {
       return employees.map(employee => {
