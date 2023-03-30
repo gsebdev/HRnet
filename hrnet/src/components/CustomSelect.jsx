@@ -84,7 +84,7 @@ export default function CustomSelect({ options = [], selected = 0, onChange }) {
                     onClick={toggleOptions}
                     onKeyDown={handleListKeyDown}
                 >
-                    {options[selectedOption]}
+                    {typeof options[selectedOption] === 'object' ? options[selectedOption].text : options[selectedOption]}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29"><path fill="none" stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" strokeWidth="2" d="m20.5 11.5-6 6-6-6"/></svg>
                 </button>
                 <ul
@@ -96,8 +96,9 @@ export default function CustomSelect({ options = [], selected = 0, onChange }) {
                 >
                     {options.map((option, index) => (
                         <li
-                            id={option}
+                            key={typeof option === 'object' ? option.value + index : option + index}
                             role="option"
+                            data-value={typeof option === 'object' ? option.value : option}
                             aria-selected={selectedOption === index}
                             tabIndex={0}
                             onKeyDown={handleKeyDown(index)}
@@ -105,7 +106,7 @@ export default function CustomSelect({ options = [], selected = 0, onChange }) {
                                 setSelectedThenCloseDropdown(index);
                             }}
                         >
-                            {option}
+                            {typeof option === 'object' ? option.text : option}
                         </li>
                     ))}
                 </ul>

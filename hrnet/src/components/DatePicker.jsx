@@ -76,12 +76,12 @@ export default function DatePicker() {
     }
     const onInputClick = (e) => {
         e.preventDefault()
-        if(opened){
+        if (opened) {
             closeAndReset()
-        }else{
+        } else {
             setOpened(true)
         }
-        
+
     }
     const onTodayClick = () => {
         setSelectedMonth(now.getMonth())

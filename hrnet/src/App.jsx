@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './app.scss';
 import CreateEmployee from './pages/CreateEmployee';
+import ViewEmployees from './pages/ViewEmployees';
 
 
 function App() {
@@ -15,22 +16,23 @@ function App() {
     <div className="hr-app">
       <h1>HRnet</h1>
       {view === 'create' &&
-        <React.Fragment>
+        <>
           <a href='/' onClick={onViewClick}>View Current Employees</a>
           <h2>Create Employee</h2>
           <CreateEmployee />
-        </React.Fragment>
+        </>
       }
       {view === 'list' &&
-        <React.Fragment>
+        <>
           <a href='/' onClick={onViewClick}>Create a new Employee</a>
           <h2>Current Employees</h2>
-        </React.Fragment>
+          <ViewEmployees />
+        </>
       }
 
 
     </div>
-  );
+  )
 }
 
 export default App;
