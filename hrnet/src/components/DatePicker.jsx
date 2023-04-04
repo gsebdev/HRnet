@@ -2,20 +2,23 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import '../datepicker.scss'
 import useOutsideClick from '../hooks/useOusideClick'
 
-export default function DatePicker({id, onChange, value = null}) {
+export default function DatePicker({id, onChange, value = ''}) {
     const now = useMemo(() => new Date(), [])
-    const [selectedDate, setSelectedDate] = useState(value)
+    const [selectedDate, setSelectedDate] = useState(value ? new Date(value) : null)
     const [selectedMonth, setSelectedMonth] = useState(now.getMonth())
     const [selectedYear, setSelectedYear] = useState(now.getFullYear())
     const [displayedWeeks, setDisplayedWeeks] = useState([])
     const [opened, setOpened] = useState(false)
     const [selectionTab, setSelectionTab] = useState('day')
     const [yearsArray, setYearsArray] = useState([])
+    const [triggerChange, setTriggerChange] = useState(false)
 
     const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     const monthNames = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
     const prefix = 'HRnet-datepicker'
     const datepickerRef = useRef(null)
+    const dateInputRef = useRef(null)
+    
     const closeAndReset = useCallback(() => {
         setOpened(false)
         setSelectionTab('day')
@@ -24,6 +27,20 @@ export default function DatePicker({id, onChange, value = null}) {
         setSelectedMonth(resetMonth)
         setSelectedYear(resetYear)
     }, [now, selectedDate])
+
+    const formatDate = date => {
+        const formatNumber = number => number < 10 ? '0' + number : number
+        const month = formatNumber(date.getMonth() + 1)
+        const day = formatNumber(date.getDate())
+        const year = date.getFullYear()
+        return month + '/' + day + '/' + year
+    }
+    useEffect(() => {
+        if(triggerChange) {
+            onChange({target: dateInputRef.current})
+            setTriggerChange(false)
+        }
+    }, [triggerChange, onChange])
 
     useOutsideClick(datepickerRef, closeAndReset, opened)
 
@@ -62,6 +79,7 @@ export default function DatePicker({id, onChange, value = null}) {
 
     }, [selectedYear, selectedMonth])
 
+    
     const onYearChange = (value) => {
         setSelectionTab('day')
         setSelectedYear(value)
@@ -71,11 +89,15 @@ export default function DatePicker({id, onChange, value = null}) {
         setSelectedMonth(index)
     }
     const onDayClick = (e) => {
-        setSelectedDate(new Date(e.target.closest('.' + prefix + '__day').id))
+        const newDate = new Date(e.target.closest('.' + prefix + '__day').id)
+        setSelectedDate(newDate)
         setOpened(false)
+        setTriggerChange(true)
     }
+
     const onInputClick = (e) => {
         e.preventDefault()
+        e.stopPropagation()
         if (opened) {
             closeAndReset()
         } else {
@@ -136,23 +158,13 @@ export default function DatePicker({id, onChange, value = null}) {
         setSelectionTab(tab)
     }
 
-    const formatDate = date => {
-        const formatNumber = number => number < 10 ? '0' + number : number
-        const month = formatNumber(date.getMonth() + 1)
-        const day = formatNumber(date.getDate())
-        const year = date.getFullYear()
-        return month + '/' + day + '/' + year
-    }
+ 
 
     return (
         <div className={prefix}>
-            <div className={prefix + "__input-container"} onClick={onInputClick}>
-                <input type="text" id={id} value={selectedDate ? formatDate(selectedDate) : ''} readOnly={true} onChange={onChange} />
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    className='calendar-icon'
-                >
+            <div className={prefix + "__input-container"} onKeyDown={onInputClick} onClick={onInputClick}>
+                <input type="text" id={id} value={selectedDate ? formatDate(selectedDate) : ''} readOnly={true} ref={dateInputRef} />
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className='calendar-icon'>
                     <path d="M12,14a1,1,0,1,0-1-1A1,1,0,0,0,12,14Zm5,0a1,1,0,1,0-1-1A1,1,0,0,0,17,14Zm-5,4a1,1,0,1,0-1-1A1,1,0,0,0,12,18Zm5,0a1,1,0,1,0-1-1A1,1,0,0,0,17,18ZM7,14a1,1,0,1,0-1-1A1,1,0,0,0,7,14ZM19,4H18V3a1,1,0,0,0-2,0V4H8V3A1,1,0,0,0,6,3V4H5A3,3,0,0,0,2,7V19a3,3,0,0,0,3,3H19a3,3,0,0,0,3-3V7A3,3,0,0,0,19,4Zm1,15a1,1,0,0,1-1,1H5a1,1,0,0,1-1-1V10H20ZM20,8H4V7A1,1,0,0,1,5,6H19a1,1,0,0,1,1,1ZM7,18a1,1,0,1,0-1-1A1,1,0,0,0,7,18Z" />
                 </svg>
             </div>

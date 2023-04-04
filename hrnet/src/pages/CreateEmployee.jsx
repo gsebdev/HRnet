@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { states } from '../config/states'
 import { departments } from '../config/departements'
 import DatePicker from "../components/DatePicker"
@@ -11,6 +11,7 @@ export default function CreateEmployee() {
     const [ employeeFormValues, setEmployeeFormValues] = useState({})
 
     const onInputChange = (e) => {
+        console.log(e)
         const formValues = { ...employeeFormValues}
         formValues[e.target.id] = e.target.value
         setEmployeeFormValues(formValues)

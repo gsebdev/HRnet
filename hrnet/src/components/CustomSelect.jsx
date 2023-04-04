@@ -18,7 +18,7 @@ export default function CustomSelect({ options = [], defaultValue, onChange, id,
         }
 
     }, [onChange])
-    
+
     useEffect(() => {
         if(defaultValue) {
             let selected = null
@@ -32,6 +32,7 @@ export default function CustomSelect({ options = [], defaultValue, onChange, id,
         }
        
     }, [defaultValue, options])
+    
     useEffect(() => {
         if(!isOptionsOpen) {
             triggerChange(selectedOption)
@@ -60,7 +61,7 @@ export default function CustomSelect({ options = [], defaultValue, onChange, id,
             default:
                 break
         }
-    };
+    }
 
     const handleListKeyDown = (e) => {
         switch (e.key) {
@@ -87,7 +88,7 @@ export default function CustomSelect({ options = [], defaultValue, onChange, id,
             default:
                 break
         }
-    };
+    }
 
     return (
         <div className="custom-select" ref={containerRef}>
@@ -130,5 +131,5 @@ export default function CustomSelect({ options = [], defaultValue, onChange, id,
                 </ul>
             </div>
         </div>
-    );
-};
+    )
+}
