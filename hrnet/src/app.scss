@@ -56,7 +56,9 @@ button[type=submit] {
 }
 .hr-app {
     margin: 0 auto 100px;
-    max-width: 500px;
+    width: 100%;
+    padding: 0 50px;
+    box-sizing: border-box;
     &__create-form {
         display: flex;
         flex-direction: column;
