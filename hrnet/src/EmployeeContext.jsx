@@ -1,10 +1,11 @@
 import { createContext, useContext, useReducer } from 'react'
+import { employees } from './fixtures/employees'
 
 const EmployeesContext = createContext([])
 
 const initialEmployees = () => {
   const storage = localStorage.getItem('employees')
-  return storage ? JSON.parse(storage) : []
+  return storage ? JSON.parse(storage) : employees
 }
 export function EmployeesProvider({ children }) {
   const [employees, dispatch] = useReducer(
@@ -13,22 +14,34 @@ export function EmployeesProvider({ children }) {
   )
   return (
     <EmployeesContext.Provider value={[employees, dispatch]}>
-        {children}
+      {children}
     </EmployeesContext.Provider>
   )
 }
 
 export function useEmployeesContext() {
-  return useContext(EmployeesContext)[0]
+  const [employees] = useContext(EmployeesContext)
+  return employees
 }
 export function useEmployeesDispatch() {
-    return useContext(EmployeesContext)[1]
+  const [employees, dispatch] = useContext(EmployeesContext)
+  return dispatch
+
 }
 
 function employeesReducer(employees, action) {
   switch (action.type) {
     case 'add': {
-      const updatedEmployees = [...employees, action.employee]
+      const getNewId = () => {
+        if (employees.length === 0) {
+          return 1
+        } else {
+          const ids = employees.map(empl => { return typeof empl.id === 'number' ? empl.id : 0 })
+          return Math.max(...ids) + 1
+        }
+      }
+      const newEmployee = { ...action.employee, id: getNewId() }
+      const updatedEmployees = [...employees, newEmployee]
       localStorage.setItem('employees', JSON.stringify(updatedEmployees))
       return updatedEmployees
     }
@@ -42,7 +55,9 @@ function employeesReducer(employees, action) {
       });
     }
     case 'delete': {
-      return employees.filter(employee => employee.id !== action.id);
+      const updatedEmployees = employees.filter(employee => employee.id !== action.id)
+      localStorage.setItem('employees', JSON.stringify(updatedEmployees))
+      return updatedEmployees
     }
     default: {
       throw Error('Unknown action: ' + action.type);

@@ -5,13 +5,13 @@ import DatePicker from "../components/DatePicker"
 import CustomSelect from "../components/CustomSelect";
 import Modal from "../components/Modal";
 import { useEmployeesDispatch } from "../EmployeeContext";
+import { Link } from "react-router-dom";
 
 export default function CreateEmployee() {
     const [modalVisible, setModalVisible] = useState(false)
     const [ employeeFormValues, setEmployeeFormValues] = useState({})
 
     const onInputChange = (e) => {
-        console.log(e)
         const formValues = { ...employeeFormValues}
         formValues[e.target.id] = e.target.value
         setEmployeeFormValues(formValues)
@@ -31,6 +31,8 @@ export default function CreateEmployee() {
 
     return (
         <>
+            <Link to={'/employees'}>View Current Employees</Link>
+            <h2>Create Employee</h2>
             <form className="hr-app__create-form" onSubmit={onFormSubmit}>
                 <label htmlFor="firstName">First Name</label>
                 <input type='text' id="firstName" onChange={onInputChange} value={employeeFormValues.firstName ? employeeFormValues.firstName : ''} />

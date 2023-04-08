@@ -1,8 +1,11 @@
+import { Link } from "react-router-dom"
 import DataTable from "../components/DataTable"
-import { useEmployeesContext } from "../EmployeeContext"
+import { useEmployeesContext, useEmployeesDispatch } from "../EmployeeContext"
+import deleteIcon from '../icons/delete.svg'
 
 export default function ViewEmployees() {
     const employees = useEmployeesContext()
+    const dispatch = useEmployeesDispatch()
     const columns = [
         {
             name: 'First Name',
@@ -41,9 +44,34 @@ export default function ViewEmployees() {
             selector: row => row.zipCode
         },
     ]
-
+    const deleteRows = (checked) => {
+        checked.forEach(id => {
+            dispatch({
+                type: 'delete',
+                id: id
+            })
+        })
+    }
+    console.log(employees)
     return (
-        <DataTable rows={employees} columns={columns} id='employeeTable' />
+        <>
+            <Link to='/'>Create a new Employee</Link>
+            <h2>Current Employees</h2>
+            <DataTable
+                rows={employees}
+                columns={columns}
+                id='employeeTable'
+                selectionActions={[
+                    {
+                        name: 'Delete selected',
+                        icon: deleteIcon,
+                        fn: deleteRows 
+                    }
+                ]}
+
+            />
+        </>
+
 
     )
 }
