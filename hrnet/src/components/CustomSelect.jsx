@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import '../custom-select.scss'
 import useOutsideClick from "../hooks/useOusideClick";
 
-export default function CustomSelect({ options = [], defaultValue, onChange, id, placeHolder }) {
+export default function CustomSelect({ options = [], value, onChange, id, placeholder }) {
     const [isOptionsOpen, setIsOptionsOpen] = useState(false)
     const [selectedOption, setSelectedOption] = useState(null)
     const lastSelectedOption = useRef(null)
@@ -20,19 +20,22 @@ export default function CustomSelect({ options = [], defaultValue, onChange, id,
     }, [onChange])
 
     useEffect(() => {
-        if(defaultValue) {
+        if(value) {
             let selected = null
             if(options && typeof options[0] === 'object') {
-                selected = options.map(o => o.value).indexOf(defaultValue)
+                selected = options.map(o => o.value).indexOf(value)
             } else {
-                selected = options.indexOf(defaultValue)
+                selected = options.indexOf(value)
             }
             lastSelectedOption.current = selected
             setSelectedOption(selected)
         }
+        else {
+            setSelectedOption(null)
+        }
        
-    }, [defaultValue, options])
-    
+    }, [value, options])
+
     useEffect(() => {
         if(!isOptionsOpen) {
             triggerChange(selectedOption)
@@ -72,17 +75,11 @@ export default function CustomSelect({ options = [], defaultValue, onChange, id,
             case "ArrowUp":
                 e.preventDefault()
                 const optionUp = selectedOption - 1 >= 0 ? selectedOption - 1 : options.length - 1
-                if (!isOptionsOpen) {
-                    triggerChange(optionUp)
-                }
                 setSelectedOption(optionUp)
                 break;
             case "ArrowDown":
                 e.preventDefault()
                 const optionDown = selectedOption === options.length - 1 ? 0 : selectedOption + 1
-                if (!isOptionsOpen) {
-                    triggerChange(optionDown)
-                }
                 setSelectedOption(optionDown)
                 break
             default:
@@ -104,7 +101,7 @@ export default function CustomSelect({ options = [], defaultValue, onChange, id,
                     value={selectedOption !== null ? typeof options[selectedOption] === 'object' ? options[selectedOption].value : options[selectedOption] : undefined}
                     ref={selectRef}
                 >
-                    {selectedOption !== null ? typeof options[selectedOption] === 'object' ? options[selectedOption].text : options[selectedOption] : placeHolder}
+                    {selectedOption !== null ? typeof options[selectedOption] === 'object' ? options[selectedOption].text : options[selectedOption] : placeholder}
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29"><path fill="none" stroke="#000" strokeLinecap="round" strokeLinejoin="round" strokeMiterlimit="10" strokeWidth="2" d="m20.5 11.5-6 6-6-6"/></svg>
                 </button>
                 <ul

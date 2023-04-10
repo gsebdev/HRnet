@@ -1,0 +1,18 @@
+.SG-form {
+    &__input-group {
+        position: relative;
+        &.has-error {
+            &::after {
+                content: attr(data-error);
+                position: absolute;
+                right: 0;
+                top: 0.75em;
+                font-size: 0.66em;
+                color: rgb(241, 149, 149);
+            }
+            input {
+                border: 2px rgb(241, 149, 149) solid;
+            }
+        }
+    }
+}

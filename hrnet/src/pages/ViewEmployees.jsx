@@ -9,39 +9,39 @@ export default function ViewEmployees() {
     const columns = [
         {
             name: 'First Name',
-            selector: row => row.firstName
+            selector: row => row?.firstName
         },
         {
             name: 'Last Name',
-            selector: row => row.lastName
+            selector: row => row?.lastName
         },
         {
             name: 'Start Date',
-            selector: row => row.startDate
+            selector: row => row?.startDate
         },
         {
             name: 'Department',
-            selector: row => row.department
+            selector: row => row?.department
         },
         {
             name: 'Date of Birth',
-            selector: row => row.dateOfBirth
+            selector: row => row?.dateOfBirth
         },
         {
             name: 'Street',
-            selector: row => row.street
+            selector: row => row?.address?.street
         },
         {
             name: 'City',
-            selector: row => row.city
+            selector: row => row?.address?.city
         },
         {
             name: 'State',
-            selector: row => row.state
+            selector: row => row?.address?.state
         },
         {
             name: 'Zip Code',
-            selector: row => row.zipCode
+            selector: row => row?.address?.zipCode
         },
     ]
     const deleteRows = (checked) => {
@@ -52,7 +52,6 @@ export default function ViewEmployees() {
             })
         })
     }
-    console.log(employees)
     return (
         <>
             <Link to='/'>Create a new Employee</Link>

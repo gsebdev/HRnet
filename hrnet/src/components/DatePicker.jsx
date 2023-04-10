@@ -4,7 +4,7 @@ import useOutsideClick from '../hooks/useOusideClick'
 
 export default function DatePicker({id, onChange, value = ''}) {
     const now = useMemo(() => new Date(), [])
-    const [selectedDate, setSelectedDate] = useState(value ? new Date(value) : null)
+    const [selectedDate, setSelectedDate] = useState(null)
     const [selectedMonth, setSelectedMonth] = useState(now.getMonth())
     const [selectedYear, setSelectedYear] = useState(now.getFullYear())
     const [displayedWeeks, setDisplayedWeeks] = useState([])
@@ -36,6 +36,14 @@ export default function DatePicker({id, onChange, value = ''}) {
         return month + '/' + day + '/' + year
     }
     useEffect(() => {
+        if(!value){
+            setSelectedDate(null)
+        }else{
+            new Date(value)
+        }
+        
+    }, [value])
+    useEffect(() => {
         if(triggerChange) {
             onChange({target: dateInputRef.current})
             setTriggerChange(false)
@@ -43,7 +51,7 @@ export default function DatePicker({id, onChange, value = ''}) {
     }, [triggerChange, onChange])
 
     useOutsideClick(datepickerRef, closeAndReset, opened)
-
+    
     useEffect(() => {
         const years = []
         for (let y = selectedYear - 10; y < selectedYear + 10; y++) {

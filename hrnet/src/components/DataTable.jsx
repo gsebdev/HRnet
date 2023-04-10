@@ -8,14 +8,14 @@ function useFilter(rows, filter) {
 
     // create an array of strings to be able to test values with indexOf
     useEffect(() => {
-        setRowsToString(rows.map(row => Object.values(row).toString()))
+        setRowsToString(rows.map(row => Object.values(row).toString().toLowerCase()))
     }, [rows])
 
     //filter rows
     useEffect(() => {
         if (filter) {
             if (rowsToString.length === rows.length) {
-                const filtered = rows.filter((row, index) => rowsToString[index].indexOf(filter) !== -1)
+                const filtered = rows.filter((row, index) => rowsToString[index].indexOf(filter.toLowerCase()) !== -1)
                 setFilteredRows(filtered)
             }
         } else {
@@ -59,17 +59,28 @@ export default function DataTable({ rows, columns, id, pagination = true, pagina
 
     // check if data is string or number, otherwise convert it
     const checkedRows = useMemo(() => {
+        const check = (value) => {
+            if (typeof value !== 'string' && typeof value !== 'number') {
+                if (value instanceof Date) {
+                    value = value.toLocaleDateString('en-EN')
+                } else if (value instanceof Array) {
+                    value = value.toString()
+                } else {
+                    value = 'data error'
+                }
+            }
+            return value
+        }
         return rows.map((row) => {
             for (const [key, value] of Object.entries(row)) {
-                if (typeof value !== 'string' && typeof value !== 'number') {
-                    if (value instanceof Date) {
-                        row[key] = value.toLocaleDateString('en-EN')
-                    } else if (value instanceof Array) {
-                        row[key] = value.toString()
-                    } else {
-                        row[key] = 'data error'
+                if(typeof value === 'object' && !Array.isArray(value)) {
+                    const groupedRows = value
+                    for (const [k, val] of Object.entries(groupedRows)) {
+                            row[key][k] = check(val)
                     }
-                }
+                } else {
+                        row[key] = check(value)
+                } 
             }
             return row
         })
@@ -89,7 +100,6 @@ export default function DataTable({ rows, columns, id, pagination = true, pagina
 
     const { filteredRows } = useFilter(sortedRows, filter)
     const { displayedRows, page, itemsPerPage, pageList, setItemsPerPage, setPage } = usePagination(filteredRows, itemsPerPageSelectOptions)
-    console.log(pageList)
     useEffect(() => {
         const { index, order } = sortColumn
         if (index !== null && order !== null) {
@@ -194,7 +204,7 @@ export default function DataTable({ rows, columns, id, pagination = true, pagina
                                         {columns.map((column, x) => {
                                             return (
                                                 <td key={column + x + y}>
-                                                    {column.selector(row)}
+                                                    {column.selector(row) ? column.selector(row) : ''}
                                                 </td>
                                             )
                                         })}
@@ -210,14 +220,16 @@ export default function DataTable({ rows, columns, id, pagination = true, pagina
                     <div className='SG-data-table__actions'>
                         {selectionActions.map((action, index) => {
 
-                            return action.icon ? <span><img src={action.icon} alt={action.name} key={index + action} onClick={() => { action.fn(checked); setChecked([]) }} /></span> : <span key={index + action} onClick={() => { action.fn(checked); setChecked([]) }}>{action.name}</span>
+                            return action.icon ? <span key={action + index}><img src={action.icon} alt={action.name} key={index + action} onClick={() => { action.fn(checked); setChecked([]) }} /></span> : <span key={index + action} onClick={() => { action.fn(checked); setChecked([]) }}>{action.name}</span>
                         })}
                         <span>{checked.length} row{checked.length === 1 ? '' : 's'} selected</span>
                     </div>
                 }
             </div>
             {pagination && <div className="SG-data-table__pagination">
-                <span>{filteredRows.length > 0 ? ((page - 1) * itemsPerPageSelectOptions[itemsPerPage]) + 1 : 0} - {(page * itemsPerPageSelectOptions[itemsPerPage]) > filteredRows.length ? filteredRows.length : (page * itemsPerPageSelectOptions[itemsPerPage])} of {filteredRows.length}</span>
+                {typeof itemsPerPageSelectOptions[itemsPerPage] === 'number' && <span>{filteredRows.length > 0 ? ((page - 1) * itemsPerPageSelectOptions[itemsPerPage]) + 1 : 0} - {(page * itemsPerPageSelectOptions[itemsPerPage]) > filteredRows.length ? filteredRows.length : (page * itemsPerPageSelectOptions[itemsPerPage])} of {filteredRows.length}</span>}
+                {typeof itemsPerPageSelectOptions[itemsPerPage] === 'string' && <span>{filteredRows.length > 0 ? '1' : '0'} - {filteredRows.length} of {filteredRows.length}</span>}
+
                 <div>
                     {pageList.length > 0 &&
                         <>
