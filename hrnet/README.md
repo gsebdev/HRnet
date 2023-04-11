@@ -1,4 +1,5 @@
-# Getting Started with Create React App
+# HRnet App
+This project was to migrate a jQuery App to a React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

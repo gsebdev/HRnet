@@ -4,7 +4,7 @@ import { departments } from '../config/departements'
 import DatePicker from "../components/DatePicker"
 import CustomSelect from "../components/CustomSelect";
 import Modal from "../components/Modal";
-import { useEmployeesDispatch } from "../EmployeeContext";
+import { useEmployeesDispatch } from "../context/EmployeeContext";
 import { Link } from "react-router-dom";
 import ControledForm from "../components/ControledForm";
 

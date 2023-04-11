@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import '../datepicker.scss'
+import '../styles/datepicker.scss'
 import useOutsideClick from '../hooks/useOusideClick'
 
 export default function DatePicker({id, onChange, value = ''}) {

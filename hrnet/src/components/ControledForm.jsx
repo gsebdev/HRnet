@@ -1,23 +1,39 @@
 import { useState } from "react"
-import '../controled-form.scss'
+import '../styles/controled-form.scss'
+
 export default function ControledForm({ fields, onSubmit, submitText, className }) {
     const [fieldsState, setFieldsState] = useState(fields)
     const [liveControl, setLiveControl] = useState(false)
-    
+
     const isValid = (field) => {
         return field.assertFn ? field.assertFn(field.value) : true
+    }
+    const resetForm = () => {
+        setLiveControl(false)
+        Object.keys(fieldsState).forEach(id => {
+            if (fieldsState[id].type === 'fieldset') {
+                const inputs = fieldsState[id].inputs
+                Object.keys(inputs).forEach(inputId => {
+                    inputs[inputId].value = null
+                    inputs[inputId].error = undefined
+                })
+            } else {
+                fieldsState[id].value = null
+                fieldsState[id].error = undefined
+            }
+        })
     }
     const onInputChange = (e, id, fieldset = null) => {
         const newFields = { ...fieldsState }
         if (!fieldset) {
             newFields[id].value = e.target.value
-            if(liveControl) {
+            if (liveControl) {
                 const valid = isValid(newFields[id])
-                    newFields[id].error = valid === true ? undefined : valid
+                newFields[id].error = valid === true ? undefined : valid
             }
         } else {
             newFields[fieldset].inputs[id].value = e.target.value
-            if(liveControl) {
+            if (liveControl) {
                 const valid = isValid(newFields[fieldset].inputs[id])
                 newFields[fieldset].inputs[id].error = valid === true ? undefined : valid
             }
@@ -64,7 +80,8 @@ export default function ControledForm({ fields, onSubmit, submitText, className 
                 }
             })
             onSubmit(values)
-            setFieldsState({...fields})
+            resetForm()
+
         }
     }
     const getInput = (field, id, fieldset = null) => {

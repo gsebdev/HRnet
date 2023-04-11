@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import '../custom-select.scss'
+import '../styles/custom-select.scss'
 import useOutsideClick from "../hooks/useOusideClick";
 
 export default function CustomSelect({ options = [], value, onChange, id, placeholder }) {

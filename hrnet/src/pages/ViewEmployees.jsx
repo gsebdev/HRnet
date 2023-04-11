@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom"
-import DataTable from "../components/DataTable"
-import { useEmployeesContext, useEmployeesDispatch } from "../EmployeeContext"
+import { DataTable } from "@gsebdev/react-data-table"
+import { useEmployeesContext, useEmployeesDispatch } from "../context/EmployeeContext"
 import deleteIcon from '../icons/delete.svg'
 
 export default function ViewEmployees() {

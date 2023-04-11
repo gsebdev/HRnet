@@ -1,5 +1,5 @@
 import React from 'react';
-import './app.scss';
+import './styles/app.scss';
 import CreateEmployee from './pages/CreateEmployee';
 import ViewEmployees from './pages/ViewEmployees';
 import {

@@ -1,11 +1,11 @@
 import { createContext, useContext, useReducer } from 'react'
-import { employees } from './fixtures/employees'
+import { employees } from '../fixtures/employees'
 
 const EmployeesContext = createContext([])
 
 const initialEmployees = () => {
   const storage = localStorage.getItem('employees')
-  return storage ? JSON.parse(storage) : employees
+  return storage && JSON.parse(storage).length > 0? JSON.parse(storage) : employees
 }
 export function EmployeesProvider({ children }) {
   const [employees, dispatch] = useReducer(

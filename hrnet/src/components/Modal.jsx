@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import useOutsideClick from "../hooks/useOusideClick";
-import '../modal.scss'
+import '../styles/modal.scss'
 
 export default function Modal({ visible, onClose, children }) {
     useEffect(() => {
