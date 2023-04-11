@@ -9,9 +9,12 @@ import { Link } from "react-router-dom";
 import ControledForm from "../components/ControledForm";
 
 export default function CreateEmployee() {
+    // state to define if the modale is visible or not
     const [modalVisible, setModalVisible] = useState(false)
-
+    // custom hook that returns the dispatch function from the useReducer react hook
     const dispatch = useEmployeesDispatch()
+
+    // event handler : form submit function
     const onFormSubmit = (employeeFormValues) => {
         dispatch({
             type: 'add',
@@ -19,6 +22,7 @@ export default function CreateEmployee() {
         })
         setModalVisible(true)
     }
+    // event handler: close the modale
     const handleModalClose = () => {
         setModalVisible(false)
     }

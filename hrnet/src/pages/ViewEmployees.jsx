@@ -6,6 +6,8 @@ import deleteIcon from '../icons/delete.svg'
 export default function ViewEmployees() {
     const employees = useEmployeesContext()
     const dispatch = useEmployeesDispatch()
+
+    // define columns to display for the data table
     const columns = [
         {
             name: 'First Name',
@@ -44,6 +46,8 @@ export default function ViewEmployees() {
             selector: row => row?.address?.zipCode
         },
     ]
+
+    // function that delete one row
     const deleteRows = (checked) => {
         checked.forEach(id => {
             dispatch({

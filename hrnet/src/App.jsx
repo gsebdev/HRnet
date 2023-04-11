@@ -9,6 +9,7 @@ import {
 
 
 function App() {
+  // define the router
   const router = createBrowserRouter([
     {
       path: '/',
@@ -19,6 +20,7 @@ function App() {
       element: <ViewEmployees/>
     }
   ])
+  
   return (
     <div className="hr-app">
       <h1>HRnet</h1>

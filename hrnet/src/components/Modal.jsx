@@ -3,8 +3,11 @@ import useOutsideClick from "../hooks/useOusideClick";
 import '../styles/modal.scss'
 
 export default function Modal({ visible, onClose, children }) {
-    useEffect(() => {
+    const ref = useRef()
+    // detects outside click when modal is visible, and call onClose when an outside click is detected
+    useOutsideClick(ref, onClose, visible)
 
+    useEffect(() => {
         if (visible) {
             const body = document.body
             const scrollBarSize = window.innerWidth > body.offsetWidth ? window.innerWidth - body.offsetWidth : null
@@ -23,8 +26,7 @@ export default function Modal({ visible, onClose, children }) {
         }
 
     }, [visible])
-    const ref = useRef()
-    useOutsideClick(ref, onClose, visible)
+
     return (
         <>
             {visible &&

@@ -2,23 +2,33 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import '../styles/datepicker.scss'
 import useOutsideClick from '../hooks/useOusideClick'
 
-export default function DatePicker({id, onChange, value = ''}) {
+export default function DatePicker({ id, onChange, value = '' }) {
+    // gets the today date time object
     const now = useMemo(() => new Date(), [])
+
     const [selectedDate, setSelectedDate] = useState(null)
     const [selectedMonth, setSelectedMonth] = useState(now.getMonth())
     const [selectedYear, setSelectedYear] = useState(now.getFullYear())
+
+    // state needed to display the day view, an array of the month weeks containing an array of week dates
     const [displayedWeeks, setDisplayedWeeks] = useState([])
+    // state to define if datepicker is opened or not
     const [opened, setOpened] = useState(false)
+    // state that tells wich tab is active : day, month, years
     const [selectionTab, setSelectionTab] = useState('day')
+    // years array needed for the years view
     const [yearsArray, setYearsArray] = useState([])
+    // state that tells the component to call the onchange function
     const [triggerChange, setTriggerChange] = useState(false)
 
     const weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     const monthNames = ['January', 'Febuary', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+    // className prefix for this component
     const prefix = 'HRnet-datepicker'
+
     const datepickerRef = useRef(null)
     const dateInputRef = useRef(null)
-    
+
     const closeAndReset = useCallback(() => {
         setOpened(false)
         setSelectionTab('day')
@@ -28,6 +38,7 @@ export default function DatePicker({id, onChange, value = ''}) {
         setSelectedYear(resetYear)
     }, [now, selectedDate])
 
+    // function that returns a string reprensenting the Date object
     const formatDate = date => {
         const formatNumber = number => number < 10 ? '0' + number : number
         const month = formatNumber(date.getMonth() + 1)
@@ -35,23 +46,29 @@ export default function DatePicker({id, onChange, value = ''}) {
         const year = date.getFullYear()
         return month + '/' + day + '/' + year
     }
+
+    //if a value prop is passed to the component, update the selecterdDate state
     useEffect(() => {
-        if(!value){
+        if (!value) {
             setSelectedDate(null)
-        }else{
+        } else {
             new Date(value)
         }
-        
+
     }, [value])
+
+    // if triggerchange state is true then call the onChange callback funtion
     useEffect(() => {
-        if(triggerChange) {
-            onChange({target: dateInputRef.current})
+        if (triggerChange) {
+            onChange({ target: dateInputRef.current })
             setTriggerChange(false)
         }
     }, [triggerChange, onChange])
 
+    //use outside click to close the date picker if user clicks outside when opened
     useOutsideClick(datepickerRef, closeAndReset, opened)
-    
+
+    //if user change the selectedYear, then udate the years array that is displayed on year tab view
     useEffect(() => {
         const years = []
         for (let y = selectedYear - 10; y < selectedYear + 10; y++) {
@@ -60,6 +77,7 @@ export default function DatePicker({id, onChange, value = ''}) {
         setYearsArray(years)
     }, [selectedYear])
 
+    //get the array of weeks and dates needed for the day tab view, and update the displayedWeeks state
     useEffect(() => {
         function getMonthLength(year, month) {
             const monthLastDate = new Date(year, month + 1, 0)
@@ -73,6 +91,7 @@ export default function DatePicker({id, onChange, value = ''}) {
         const currentMonthLastDate = getMonthLength(selectedYear, selectedMonth)
         // initialize a new array
         const calendarArray = []
+        //determine if 6 or 5 weeks have to be displayed for this month
         const numberOfWeeksToDisplay = currentMonthFirstDay + currentMonthLastDate > 35 ? 6 : 5
         for (let week = 0; week < numberOfWeeksToDisplay; week++) {
             const weekArray = []
@@ -87,15 +106,17 @@ export default function DatePicker({id, onChange, value = ''}) {
 
     }, [selectedYear, selectedMonth])
 
-    
+
     const onYearChange = (value) => {
         setSelectionTab('day')
         setSelectedYear(value)
     }
+
     const onMonthChange = (index) => {
         setSelectionTab('day')
         setSelectedMonth(index)
     }
+
     const onDayClick = (e) => {
         const newDate = new Date(e.target.closest('.' + prefix + '__day').id)
         setSelectedDate(newDate)
@@ -113,10 +134,12 @@ export default function DatePicker({id, onChange, value = ''}) {
         }
 
     }
+
     const onTodayClick = () => {
         setSelectedMonth(now.getMonth())
         setSelectedYear(now.getFullYear())
     }
+
     const onNavClick = (e, direction, dateElement = 'day') => {
         e.preventDefault()
         switch (dateElement) {
@@ -159,14 +182,13 @@ export default function DatePicker({id, onChange, value = ''}) {
             default: break
         }
     }
+
     const changeSelectionTab = (e = null, tab) => {
         if (e) {
             e.preventDefault()
         }
         setSelectionTab(tab)
     }
-
- 
 
     return (
         <div className={prefix}>
