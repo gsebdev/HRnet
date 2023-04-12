@@ -4,7 +4,9 @@ import { useEmployeesContext, useEmployeesDispatch } from "../context/EmployeeCo
 import deleteIcon from '../icons/delete.svg'
 
 export default function ViewEmployees() {
+    // gets the employees list from the react context state
     const employees = useEmployeesContext()
+    // custom hook that returns the dispatch function from the useReducer react hook
     const dispatch = useEmployeesDispatch()
 
     // define columns to display for the data table
@@ -74,7 +76,5 @@ export default function ViewEmployees() {
 
             />
         </>
-
-
     )
 }
