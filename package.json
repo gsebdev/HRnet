@@ -17,7 +17,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy-demo": "set PUBLIC_URL=https://gsebdev.github.io/HRnet/&& set BUILD_PATH=demo&&react-scripts build&&gh-pages -d demo"
   },
   "eslintConfig": {
     "extends": [
@@ -38,6 +39,7 @@
     ]
   },
   "devDependencies": {
+    "gh-pages": "^5.0.0",
     "sass": "^1.60.0"
   }
 }

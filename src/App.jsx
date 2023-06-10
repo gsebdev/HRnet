@@ -4,13 +4,14 @@ import CreateEmployee from './pages/CreateEmployee';
 import ViewEmployees from './pages/ViewEmployees';
 import {
   createBrowserRouter,
+  createHashRouter,
   RouterProvider,
 } from "react-router-dom";
 
 
 function App() {
   // define the router
-  const router = createBrowserRouter([
+  const routerArray = [
     {
       path: '/',
       element: <CreateEmployee/>
@@ -19,7 +20,8 @@ function App() {
       path: '/employees',
       element: <ViewEmployees/>
     }
-  ])
+  ]
+  const router = process.env.REACT_APP_USE_HASH_ROUTER === 'true' ? createHashRouter(routerArray) : createBrowserRouter(routerArray)
   
   return (
     <div className="hr-app">
