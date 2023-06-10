@@ -6,7 +6,7 @@ export default function Modal({ visible, onClose, children }) {
     const ref = useRef()
     // detects outside click when modal is visible, and call onClose when an outside click is detected
     useOutsideClick(ref, onClose, visible)
-
+    
     useEffect(() => {
         if (visible) {
             const body = document.body
