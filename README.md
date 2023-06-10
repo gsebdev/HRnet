@@ -7,3 +7,6 @@ In this project, I created several React components to replace the JQuery librar
 - a Datepicker
 - a Modal
 - a Custom Select
+
+
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
