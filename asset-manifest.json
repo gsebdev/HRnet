@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.a7356e06.css",
-    "main.js": "/static/js/main.98b89df6.js",
-    "index.html": "/index.html",
-    "static/media/delete.svg": "/static/media/delete.84bbcd51a56f13c6f167151c1ea286a2.svg",
-    "static/media/arrow.svg": "/static/media/arrow.c36c83ad8ecc875b7245b8bbf7414355.svg",
-    "main.a7356e06.css.map": "/static/css/main.a7356e06.css.map",
-    "main.98b89df6.js.map": "/static/js/main.98b89df6.js.map"
+    "main.css": "https://gsebdev.github.io/HRnet/static/css/main.a7356e06.css",
+    "main.js": "https://gsebdev.github.io/HRnet/static/js/main.15931dc2.js",
+    "index.html": "https://gsebdev.github.io/HRnet/index.html",
+    "static/media/delete.svg": "https://gsebdev.github.io/HRnet/static/media/delete.84bbcd51a56f13c6f167151c1ea286a2.svg",
+    "static/media/arrow.svg": "https://gsebdev.github.io/HRnet/static/media/arrow.c36c83ad8ecc875b7245b8bbf7414355.svg",
+    "main.a7356e06.css.map": "https://gsebdev.github.io/HRnet/static/css/main.a7356e06.css.map",
+    "main.15931dc2.js.map": "https://gsebdev.github.io/HRnet/static/js/main.15931dc2.js.map"
   },
   "entrypoints": [
     "static/css/main.a7356e06.css",
-    "static/js/main.98b89df6.js"
+    "static/js/main.15931dc2.js"
   ]
 }
